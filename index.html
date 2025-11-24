@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caixinha de Promessas Digital</title>
+
+<style>
+:root {
+  --roxo: #4a148c;
+  --roxo2: #6a1b9a;
+  --dourado: #d4af37;
+  --creme: #fff9f0;
+  --vidro: rgba(255,255,255,0.35);
+  --borda-vidro: rgba(255,255,255,0.55);
+  --sombra: rgba(0,0,0,0.22);
+  --sombra2: rgba(0,0,0,0.15);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #faf3e0, #f4e8c7);
+  min-height: 100vh;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Título */
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, var(--roxo), var(--roxo2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+/* WRAPPER */
+.caixa-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* GLOW */
+.glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(255,255,255,0.85), rgba(255,255,255,0) 75%);
+  filter: blur(35px);
+  z-index: -1;
+}
+
+/* CAIXA */
+.caixa {
+  width: 280px;
+  height: 170px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--roxo), var(--roxo2));
+  box-shadow: 0 10px 25px var(--sombra);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-bottom: 25px;
+}
+
+.caixa:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+.caixa::after {
+  content: "Clique para Tirar uma Promessa";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: white;
+  font-size: 1.1rem;
+  width: 80%;
+  text-align: center;
+}
+
+/* CARTA */
+.carta {
+  width: 300px;
+  padding: 28px 20px;
+  background: var(--vidro);
+  border: 1px solid var(--borda-vidro);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px var(--sombra2);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(50px) scale(0.94);
+  transition: all 0.5s ease-out;
+  pointer-events: none;
+}
+
+.carta.mostrar {
+  opacity: 1;
+  transform: translateY(0px) scale(1);
+  pointer-events: auto;
+}
+
+/* TEXTO */
+.verso {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.5rem;
+}
+
+.ref {
+  font-size: 1rem;
+  color: var(--roxo);
+  margin-bottom: 22px;
+  font-weight: 600;
+}
+
+/* BOTÃO WHATSAPP */
+.btn-whatsapp {
+  background: #25d366;
+  color: white;
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.20);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+
+.btn-whatsapp img {
+  width: 22px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 400px) {
+  .caixa, .carta {
+    width: 90%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>📜 Caixinha de Promessas Digital</h1>
+
+<div class="caixa-wrapper">
+  <div class="glow"></div>
+  <div class="caixa" onclick="sortear()"></div>
+</div>
+
+<div id="carta" class="carta">
+  <div id="verso" class="verso"></div>
+  <div id="ref" class="ref"></div>
+  <button class="btn-whatsapp" onclick="compartilhar()">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+    Compartilhar no WhatsApp
+  </button>
+</div>
+
+<script>
+/* ===============================
+   LISTA DE PROMESSAS (somente 20 aqui)
+   ➜ Me peça e envio +200 para colar aqui
+================================ */
+let promessas = [
+{ texto: "O Senhor lutará por vocês; somente acalmem-se.", ref: "Êxodo 14:14" },
+{ texto: "Eu estarei com você; não o deixarei, nem o abandonarei.", ref: "Josué 1:5" },
+{ texto: "Seja forte e corajoso, porque o Senhor, o seu Deus, estará com você por onde você andar.", ref: "Josué 1:9" },
+{ texto: "Eu irei adiante de ti, endireitarei os caminhos tortos.", ref: "Isaías 45:2" },
+{ texto: "Quando passares pelas águas, estarei contigo.", ref: "Isaías 43:2" },
+{ texto: "Ainda que eu ande pelo vale da sombra da morte, não temerei mal algum, porque Tu estás comigo.", ref: "Salmos 23:4" },
+{ texto: "O Senhor te conservará em vida.", ref: "Salmos 41:2" },
+{ texto: "O Senhor te sustentará no leito da enfermidade.", ref: "Salmos 41:3" },
+{ texto: "O Senhor é a minha luz e a minha salvação; de quem terei medo?", ref: "Salmos 27:1" },
+{ texto: "Entrega o teu caminho ao Senhor, confia nele, e Ele tudo fará.", ref: "Salmos 37:5" },
+{ texto: "Deus é o nosso refúgio e fortaleza, socorro bem presente na angústia.", ref: "Salmos 46:1" },
+{ texto: "O Senhor dos Exércitos está conosco.", ref: "Salmos 46:7" },
+{ texto: "Mil cairão ao teu lado, e dez mil à tua direita, mas tu não serás atingido.", ref: "Salmos 91:7" },
+{ texto: "Nenhum mal te sucederá, nem praga alguma chegará à tua tenda.", ref: "Salmos 91:10" },
+{ texto: "Porque aos Seus anjos dará ordem a teu respeito, para te guardarem.", ref: "Salmos 91:11" },
+{ texto: "Com longevidade Ele te fartará e te mostrará a salvação.", ref: "Salmos 91:16" },
+{ texto: "O Senhor firma os passos do homem bom.", ref: "Salmos 37:23" },
+{ texto: "Os olhos do Senhor estão sobre os justos.", ref: "Salmos 34:15" },
+{ texto: "O Senhor está perto dos que têm o coração quebrantado.", ref: "Salmos 34:18" },
+{ texto: "Muitos são os problemas do justo, mas o Senhor o livra de todos.", ref: "Salmos 34:19" },
+{ texto: "O Senhor é bom; a Sua misericórdia dura para sempre.", ref: "Salmos 136:1" },
+{ texto: "Ele sara os quebrantados de coração e cura as suas feridas.", ref: "Salmos 147:3" },
+{ texto: "O Senhor cumprirá o Seu propósito para comigo.", ref: "Salmos 138:8" },
+{ texto: "O Senhor abençoará os que O temem, tanto pequenos como grandes.", ref: "Salmos 115:13" },
+{ texto: "O Senhor te dará tudo o que o seu coração deseja.", ref: "Salmos 20:4" },
+{ texto: "O Senhor não negará bem algum aos que andam em retidão.", ref: "Salmos 84:11" },
+{ texto: "Os que semeiam em lágrimas colherão com júbilo.", ref: "Salmos 126:5" },
+{ texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", ref: "Salmos 30:5" },
+{ texto: "O Senhor é bom para todos, e as suas misericórdias permeiam todas as suas obras.", ref: "Salmos 145:9" },
+{ texto: "Perto está o Senhor de todos os que O invocam.", ref: "Salmos 145:18" },
+{ texto: "O nome do Senhor é uma torre forte; os justos correm para ela e estão seguros.", ref: "Provérbios 18:10" },
+{ texto: "Reconhece-O em todos os teus caminhos, e Ele endireitará as tuas veredas.", ref: "Provérbios 3:6" },
+{ texto: "O Senhor será a tua confiança e guardará os teus pés da armadilha.", ref: "Provérbios 3:26" },
+{ texto: "Os que esperam no Senhor renovarão as suas forças.", ref: "Isaías 40:31" },
+{ texto: "Eu te ajudarei, diz o Senhor.", ref: "Isaías 41:13" },
+{ texto: "Eu te tomo pela tua mão direita e te digo: Não temas.", ref: "Isaías 41:13" },
+{ texto: "Eu farei florescer no deserto.", ref: "Isaías 35:1" },
+{ texto: "Eis que faço novas todas as coisas.", ref: "Apocalipse 21:5" },
+{ texto: "Eu estarei contigo até o fim dos tempos.", ref: "Mateus 28:20" },
+{ texto: "Pedi, e dar-se-vos-á; buscai, e encontrareis.", ref: "Mateus 7:7" },
+{ texto: "Aquele que pede, recebe.", ref: "Mateus 7:8" },
+{ texto: "Vinde a Mim todos os que estais cansados e sobrecarregados, e Eu vos aliviarei.", ref: "Mateus 11:28" },
+{ texto: "Bem-aventurados os que choram, porque serão consolados.", ref: "Mateus 5:4" },
+{ texto: "Bem-aventurados os limpos de coração, porque verão a Deus.", ref: "Mateus 5:8" },
+{ texto: "Tudo é possível ao que crê.", ref: "Marcos 9:23" },
+{ texto: "Eu vim para que tenham vida, e a tenham em abundância.", ref: "João 10:10" },
+{ texto: "Eu sou o Bom Pastor; o Bom Pastor dá a vida pelas ovelhas.", ref: "João 10:11" },
+{ texto: "A paz deixo com vocês; a Minha paz lhes dou.", ref: "João 14:27" },
+{ texto: "Não se turbe o vosso coração.", ref: "João 14:1" },
+{ texto: "No mundo tereis aflições, mas tende bom ânimo; Eu venci o mundo.", ref: "João 16:33" },
+{ texto: "Eu sou a ressurreição e a vida.", ref: "João 11:25" },
+{ texto: "Se o Filho vos libertar, verdadeiramente sereis livres.", ref: "João 8:36" },
+{ texto: "Peçam o que quiserem, e será feito.", ref: "João 15:7" },
+{ texto: "O Senhor acrescentará força ao seu povo.", ref: "Salmos 29:11" },
+{ texto: "O Senhor é quem te guarda.", ref: "Salmos 121:5" },
+{ texto: "Eu cuidarei de vocês.", ref: "Isaías 46:4" },
+{ texto: "Eu mesmo irei adiante de ti.", ref: "Deuteronômio 31:8" },
+{ texto: "Eu te ensinarei o caminho que deves seguir.", ref: "Salmos 32:8" },
+{ texto: "Eu te darei sabedoria.", ref: "Tiago 1:5" },
+{ texto: "O Senhor é fiel.", ref: "2 Tessalonicenses 3:3" },
+{ texto: "Fiel é o que prometeu.", ref: "Hebreus 10:23" },
+{ texto: "Deus suprirá todas as vossas necessidades.", ref: "Filipenses 4:19" },
+{ texto: "O Senhor te fará prosperar.", ref: "Deuteronômio 30:9" },
+{ texto: "O Senhor ouvirá o teu clamor.", ref: "Salmos 34:17" },
+{ texto: "O Senhor te sustentará.", ref: "Salmos 55:22" },
+{ texto: "Quem confia no Senhor é como o monte Sião, que não se abala.", ref: "Salmos 125:1" },
+{ texto: "O justo florescerá como a palmeira.", ref: "Salmos 92:12" },
+{ texto: "Eu estarei com você em todas as suas aflições.", ref: "Isaías 63:9" },
+{ texto: "Nunca te deixarei, jamais te abandonarei.", ref: "Hebreus 13:5" },
+{ texto: "Ainda antes que houvesse dia, Eu sou.", ref: "Isaías 43:13" },
+{ texto: "O Senhor te recompensará.", ref: "Provérbios 25:22" },
+{ texto: "O Senhor te exaltará a seu tempo.", ref: "1 Pedro 5:6" },
+{ texto: "Aquele que começou boa obra em vós a completará.", ref: "Filipenses 1:6" },
+{ texto: "O Senhor te dará descanso.", ref: "Êxodo 33:14" },
+{ texto: "Ele enviará o Seu anjo adiante de ti.", ref: "Êxodo 23:20" },
+{ texto: "Eu sou contigo para te salvar.", ref: "Jeremias 30:11" },
+{ texto: "Eu restaurarei a tua saúde.", ref: "Jeremias 30:17" },
+{ texto: "Eu transformarei o seu pranto em alegria.", ref: "Jeremias 31:13" },
+{ texto: "Eu vou abrir caminhos no deserto.", ref: "Isaías 43:19" },
+{ texto: "Eu te fortalecerei.", ref: "Isaías 41:10" },
+{ texto: "Eu te sustentarei com a minha mão direita fiel.", ref: "Isaías 41:10" },
+{ texto: "Eu te livrarei.", ref: "Salmos 91:14" },
+{ texto: "Eu te honrarei.", ref: "Salmos 91:15" },
+{ texto: "Eu sou contigo para te guardar.", ref: "Gênesis 28:15" },
+{ texto: "Eu serei contigo onde quer que fores.", ref: "Josué 1:9" },
+{ texto: "Eu te cercarei com canções de livramento.", ref: "Salmos 32:7" },
+{ texto: "Eu te darei paz em vez de medo.", ref: "João 14:27" },
+{ texto: "Eu enxugarei dos seus olhos toda lágrima.", ref: "Apocalipse 21:4" },
+{ texto: "Eu renovarei as suas forças.", ref: "Isaías 40:31" },
+{ texto: "Eu te darei novas roupas de alegria.", ref: "Isaías 61:3" },
+{ texto: "Eu vou multiplicar sua vida e sua paz.", ref: "Isaías 66:12" },
+{ texto: "Eu farei você andar seguro pelo caminho.", ref: "Provérbios 3:23" },
+{ texto: "Eu te esconderei à sombra das minhas asas.", ref: "Salmos 17:8" },
+{ texto: "Eu te colocarei em lugar alto.", ref: "Salmos 91:14" },
+{ texto: "Eu vou abrir as janelas do céu sobre você.", ref: "Malaquias 3:10" },
+{ texto: "Eu te darei vida e paz.", ref: "Números 6:26" },
+{ texto: "O Senhor te abençoará e te guardará.", ref: "Números 6:24" },
+{ texto: "A minha graça te basta.", ref: "2 Coríntios 12:9" },
+{ texto: "Eu te darei sabedoria e entendimento.", ref: "Provérbios 2:6" },
+{ texto: "Eu vou cuidar de você.", ref: "1 Pedro 5:7" },
+{ texto: "Eu sararei a sua terra.", ref: "2 Crônicas 7:14" },
+{ texto: "Eu te exaltarei.", ref: "Salmos 91:14" },
+{ texto: "Eu derramarei o meu Espírito sobre você.", ref: "Joel 2:28" },
+{ texto: "Eu te darei descanso espiritual.", ref: "Mateus 11:28" },
+{ texto: "Eu te farei andar em liberdade.", ref: "Salmos 119:45" },
+{ texto: "Eu te farei mais que vencedor.", ref: "Romanos 8:37" },
+{ texto: "Eu estarei com você quando passar pelo fogo.", ref: "Isaías 43:2" },
+{ texto: "Eu serei o seu Deus, e você será meu.", ref: "Levítico 26:12" },
+{ texto: "Eu nunca falharei.", ref: "Josué 21:45" },
+{ texto: "Eu te carregarei até a velhice.", ref: "Isaías 46:4" },
+{ texto: "Eu farei sua luz brilhar na escuridão.", ref: "Isaías 58:10" },
+{ texto: "Eu abrirei portas que ninguém pode fechar.", ref: "Apocalipse 3:8" },
+{ texto: "Eu serei a sua força quando você estiver fraco.", ref: "2 Coríntios 12:10" },
+{ texto: "Eu te darei paz perfeita.", ref: "Isaías 26:3" },
+{ texto: "Eu serei a tua rocha eterna.", ref: "Isaías 26:4" },
+{ texto: "Eu renovarei a sua alegria.", ref: "Salmos 51:12" },
+{ texto: "Eu te sustentarei no dia mau.", ref: "Efésios 6:13" },
+{ texto: "Eu serei luz para os seus passos.", ref: "Salmos 119:105" },
+{ texto: "Eu te guiarei com a Minha mão poderosa.", ref: "Salmos 139:10" },
+{ texto: "Eu te livrarei da angústia.", ref: "Salmos 91:15" },
+{ texto: "Eu estou contigo todos os dias.", ref: "Mateus 28:20" },
+{ texto: "Eu farei você prosperar.", ref: "Jeremias 29:11" },
+{ texto: "Eu farei você frutificar.", ref: "Salmos 1:3" },
+{ texto: "Eu te darei vitória.", ref: "1 João 5:4" },
+{ texto: "Eu te farei vencedor sobre o mal.", ref: "Romanos 16:20" },
+{ texto: "Eu te sustentarei em minhas mãos.", ref: "Isaías 41:10" },
+{ texto: "Eu te guardarei em paz perfeita.", ref: "Isaías 26:3" },
+{ texto: "Eu te darei abundância.", ref: "Joel 2:26" },
+{ texto: "Eu serei teu escudo.", ref: "Salmos 3:3" },
+{ texto: "Eu curarei tuas feridas.", ref: "Jeremias 30:17" },
+{ texto: "Eu te farei florescer até na seca.", ref: "Jeremias 17:7-8" },
+{ texto: "Eu te ensinarei coisas grandes e ocultas.", ref: "Jeremias 33:3" },
+{ texto: "Eu farei tudo cooperar para o teu bem.", ref: "Romanos 8:28" }
+
+];
+
+let ultimaPromessa = null;
+
+function sortear() {
+  let promessa;
+  do {
+    promessa = promessas[Math.floor(Math.random() * promessas.length)];
+  } while (promessa === ultimaPromessa);
+
+  ultimaPromessa = promessa;
+
+  document.getElementById("verso").innerText = promessa.texto;
+  document.getElementById("ref").innerText = promessa.ref;
+
+  const carta = document.getElementById("carta");
+  carta.classList.add("mostrar");
+}
+
+function compartilhar() {
+  const texto = document.getElementById("verso").innerText;
+  const referencia = document.getElementById("ref").innerText;
+
+  const mensagem = `Promessa do dia:\n"${texto}"\n— ${referencia}`;
+  const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
