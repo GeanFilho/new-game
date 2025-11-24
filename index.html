@@ -9,7 +9,6 @@
 :root {
   --roxo: #4a148c;
   --roxo2: #6a1b9a;
-  --dourado: #d4af37;
   --creme: #fff9f0;
   --vidro: rgba(255,255,255,0.35);
   --borda-vidro: rgba(255,255,255,0.55);
@@ -33,7 +32,9 @@ body {
   align-items: center;
 }
 
-/* Título */
+/* =======================
+      TÍTULO
+======================= */
 h1 {
   font-size: 2rem;
   text-align: center;
@@ -44,7 +45,9 @@ h1 {
   font-weight: 800;
 }
 
-/* WRAPPER */
+/* =======================
+      WRAPPER
+======================= */
 .caixa-wrapper {
   position: relative;
   display: flex;
@@ -52,7 +55,9 @@ h1 {
   align-items: center;
 }
 
-/* GLOW */
+/* =======================
+      BRILHO
+======================= */
 .glow {
   position: absolute;
   top: -60px;
@@ -62,20 +67,24 @@ h1 {
   height: 260px;
   background: radial-gradient(circle, rgba(255,255,255,0.85), rgba(255,255,255,0) 75%);
   filter: blur(35px);
-  z-index: -1;
+  z-index: 0;
+  opacity: 0.8;
 }
 
-/* CAIXA */
+/* =======================
+      CAIXA (SÓLIDA)
+======================= */
 .caixa {
   width: 280px;
   height: 170px;
   border-radius: 22px;
-  background: linear-gradient(135deg, var(--roxo), var(--roxo2));
+  background: linear-gradient(135deg, var(--roxo), var(--roxo2)); /* FUNDO SÓLIDO */
   box-shadow: 0 10px 25px var(--sombra);
   position: relative;
   cursor: pointer;
   transition: transform 0.3s ease;
   margin-bottom: 25px;
+  z-index: 5; /* GARANTE QUE FIQUE ACIMA DO GLOW */
 }
 
 .caixa:hover {
@@ -88,13 +97,18 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  color: white;
-  font-size: 1.1rem;
-  width: 80%;
+  color: #ffffff; /* TEXTO BRANCO */
+  opacity: 1;
   text-align: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3rem;
+  text-shadow: 0 0 10px rgba(0,0,0,0.55); /* CONTRASTE */
 }
 
-/* CARTA */
+/* =======================
+      CARTA
+======================= */
 .carta {
   width: 300px;
   padding: 28px 20px;
@@ -107,6 +121,7 @@ h1 {
   transform: translateY(50px) scale(0.94);
   transition: all 0.5s ease-out;
   pointer-events: none;
+  z-index: 10;
 }
 
 .carta.mostrar {
@@ -115,7 +130,6 @@ h1 {
   pointer-events: auto;
 }
 
-/* TEXTO */
 .verso {
   font-size: 1.2rem;
   font-weight: 700;
@@ -131,7 +145,9 @@ h1 {
   font-weight: 600;
 }
 
-/* BOTÃO WHATSAPP */
+/* =======================
+      BOTÃO
+======================= */
 .btn-whatsapp {
   background: #25d366;
   color: white;
@@ -149,81 +165,32 @@ h1 {
   align-items: center;
 }
 
-.btn-whatsapp:hover {
-  background: #1ebe5d;
-}
-
 .btn-whatsapp img {
   width: 22px;
 }
 
-/* RESPONSIVO */
-/* ===========================
-   CORREÇÃO MOBILE REAL
-   (ATÉ 480px)
-=========================== */
+/* =======================
+      RESPONSIVO MOBILE
+======================= */
 @media (max-width: 480px) {
 
-  body {
-    padding: 15px;
-  }
-
-  /* Ajusta a caixa para ficar maior e mais visível */
   .caixa {
     width: 100%;
-    max-width: 330px;
-    height: 160px;
-    margin-bottom: 15px;
+    max-width: 350px;
+    height: 150px;
+    background: linear-gradient(135deg, #5c1ca8, #7a29c2); /* MAIS CONTRASTE NO MOBILE */
   }
 
-  .caixa::after {
-    font-size: 1.15rem;
-    opacity: 0.95;
-    line-height: 1.3rem;
-  }
-
-  /* Tira a carta para mais perto da caixa */
   .carta {
     width: 100%;
-    max-width: 330px;
+    max-width: 350px;
+    background: rgba(255,255,255,0.55);
     transform: translateY(20px) scale(0.97);
-    padding: 22px 18px;
   }
 
-  .carta.mostrar {
-    transform: translateY(0px) scale(1);
-  }
-
-  .glow {
-    top: -40px;
-    width: 230px;
-    height: 220px;
-    filter: blur(30px);
-  }
-
-  /* Texto da promessa */
   .verso {
-    font-size: 1.05rem;
-    line-height: 1.35rem;
+    font-size: 1.1rem;
   }
-
-  .ref {
-    font-size: 0.9rem;
-    margin-bottom: 18px;
-  }
-
-  /* Botão WhatsApp */
-  .btn-whatsapp {
-    padding: 12px;
-    font-size: 0.95rem;
-    border-radius: 14px;
-  }
-
-  .btn-whatsapp img {
-    width: 20px;
-  }
-}
-
 }
 </style>
 </head>
@@ -240,6 +207,7 @@ h1 {
 <div id="carta" class="carta">
   <div id="verso" class="verso"></div>
   <div id="ref" class="ref"></div>
+
   <button class="btn-whatsapp" onclick="compartilhar()">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
     Compartilhar no WhatsApp
@@ -248,11 +216,9 @@ h1 {
 
 <script>
 /* ===============================
-   LISTA DE PROMESSAS (somente 20 aqui)
-   ➜ Me peça e envio +200 para colar aqui
-================================ */
-let promessas = [
-{ texto: "O Senhor lutará por vocês; somente acalmem-se.", ref: "Êxodo 14:14" },
+      PROMESSAS — COLE TODAS AQUI
+=============================== */
+let promessas = [{ texto: "O Senhor lutará por vocês; somente acalmem-se.", ref: "Êxodo 14:14" },
 { texto: "Eu estarei com você; não o deixarei, nem o abandonarei.", ref: "Josué 1:5" },
 { texto: "Seja forte e corajoso, porque o Senhor, o seu Deus, estará com você por onde você andar.", ref: "Josué 1:9" },
 { texto: "Eu irei adiante de ti, endireitarei os caminhos tortos.", ref: "Isaías 45:2" },
@@ -401,8 +367,7 @@ function sortear() {
   document.getElementById("verso").innerText = promessa.texto;
   document.getElementById("ref").innerText = promessa.ref;
 
-  const carta = document.getElementById("carta");
-  carta.classList.add("mostrar");
+  document.getElementById("carta").classList.add("mostrar");
 }
 
 function compartilhar() {
